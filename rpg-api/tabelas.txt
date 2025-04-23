@@ -1,0 +1,45 @@
+-- Tabela de Personagem
+CREATE TABLE personagem (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  origem VARCHAR(255),
+  classe VARCHAR(255),
+  nex INT,
+  deslocamento INT
+);
+
+-- Tabela de Informações do Personagem
+CREATE TABLE informacoes_personagem (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  personagem_id INT,
+  pontos_vida INT,
+  pontos_esforco INT,
+  defesa INT,
+  sanidade INT,
+  FOREIGN KEY (personagem_id) REFERENCES personagem(id) ON DELETE CASCADE
+);
+
+-- Tabela de Atributos do Personagem
+CREATE TABLE atributos_personagem (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  personagem_id INT,
+  agilidade INT,
+  inteligencia INT,
+  presenca INT,
+  forca INT,
+  vigor INT,
+  FOREIGN KEY (personagem_id) REFERENCES personagem(id) ON DELETE CASCADE
+);
+
+-- Tabela de Perícias do Personagem
+CREATE TABLE pericias_personagem (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  personagem_id INT,
+  diplomacia INT,
+  enganacao INT,
+  sobrevivencia INT,
+  luta INT,
+  tecnologia INT,
+  intuicao INT,
+  FOREIGN KEY (personagem_id) REFERENCES personagem(id) ON DELETE CASCADE
+);
