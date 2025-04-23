@@ -6,26 +6,18 @@ const Pericias = require('../models/pericias');
 exports.createPersonagem = async (req, res) => {
   try {
     const { 
-      // Dados do personagem
       nome, origem, classe, nex, deslocamento,
-      // Informações
       pontos_vida, pontos_esforco, defesa, sanidade,
-      // Atributos
       agilidade, inteligencia, presenca, forca, vigor,
-      // Perícias
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
     } = req.body;
 
-    // Criar personagem principal
     const personagemId = await Personagem.create({ nome, origem, classe, nex, deslocamento });
 
-    // Criar informações relacionadas
     await Informacoes.create({ personagem_id: personagemId, pontos_vida, pontos_esforco, defesa, sanidade });
 
-    // Criar atributos relacionados
     await Atributos.create({ personagem_id: personagemId, agilidade, inteligencia, presenca, forca, vigor });
 
-    // Criar perícias relacionadas
     await Pericias.create({ 
       personagem_id: personagemId, 
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao 
@@ -78,16 +70,12 @@ exports.updatePersonagem = async (req, res) => {
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
     } = req.body;
 
-    // Atualizar personagem principal
     await Personagem.update(id, { nome, origem, classe, nex, deslocamento });
 
-    // Atualizar informações
     await Informacoes.update(id, { pontos_vida, pontos_esforco, defesa, sanidade });
 
-    // Atualizar atributos
     await Atributos.update(id, { agilidade, inteligencia, presenca, forca, vigor });
-
-    // Atualizar perícias
+    
     await Pericias.update(id, { 
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao 
     });
