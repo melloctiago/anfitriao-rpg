@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const personagemController = require('../controllers/personagemController');
+const authMiddleware = require('../middleware/authMiddleware'); 
+
+//aqui vai proteger todas as rotas abaixo
+router.use(authMiddleware);
 
 // Rotas para Personagem
 router.post('/personagens', personagemController.createPersonagem);
