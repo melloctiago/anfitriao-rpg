@@ -1,24 +1,45 @@
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const Personagem = require('./Personagem');
 
-class Pericias {
-  static async create({ personagem_id, diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao }) {
-    await db.execute(
-      'INSERT INTO pericias_personagem (personagem_id, diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [personagem_id, diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao]
-    );
+const PericiasPersonagem = sequelize.define('PericiasPersonagem', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  personagem_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Personagem,
+      key: 'id'
+    }
+  },
+  diplomacia: {
+    type: DataTypes.INTEGER
+  },
+  enganacao: {
+    type: DataTypes.INTEGER
+  },
+  sobrevivencia: {
+    type: DataTypes.INTEGER
+  },
+  luta: {
+    type: DataTypes.INTEGER
+  },
+  tecnologia: {
+    type: DataTypes.INTEGER
+  },
+  intuicao: {
+    type: DataTypes.INTEGER
   }
+}, {
+  tableName: 'pericias_personagem',
+  timestamps: false
+});
 
-  static async findByPersonagemId(personagem_id) {
-    const [rows] = await db.execute('SELECT * FROM pericias_personagem WHERE personagem_id = ?', [personagem_id]);
-    return rows[0];
-  }
+PericiasPersonagem.belongsTo(Personagem, { foreignKey: 'personagem_id' });
+Personagem.hasOne(PericiasPersonagem, { foreignKey: 'personagem_id' });
 
-  static async update(personagem_id, { diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao }) {
-    await db.execute(
-      'UPDATE pericias_personagem SET diplomacia = ?, enganacao = ?, sobrevivencia = ?, luta = ?, tecnologia = ?, intuicao = ? WHERE personagem_id = ?',
-      [diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao, personagem_id]
-    );
-  }
-}
-
-module.exports = Pericias;
+module.exports = PericiasPersonagem;

@@ -1,34 +1,34 @@
-const Personagem = require('../models/personagem');
-const Informacoes = require('../models/informacoes');
-const Atributos = require('../models/atributos');
-const Pericias = require('../models/pericias');
+const Personagem = require('../models/Personagem');
+const Informacoes = require('../models/InformacoesPersonagem');
+const Atributos = require('../models/AtributosPersonagem');
+const Pericias = require('../models/PericiasPersonagem');
 
+// Criar personagem com todos os dados
 exports.createPersonagem = async (req, res) => {
   try {
-    const { 
+    const {
       nome, origem, classe, nex, deslocamento,
       pontos_vida, pontos_esforco, defesa, sanidade,
       agilidade, inteligencia, presenca, forca, vigor,
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
     } = req.body;
 
-    const personagemId = await Personagem.create({ nome, origem, classe, nex, deslocamento });
+    const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento });
 
-    await Informacoes.create({ personagem_id: personagemId, pontos_vida, pontos_esforco, defesa, sanidade });
-
-    await Atributos.create({ personagem_id: personagemId, agilidade, inteligencia, presenca, forca, vigor });
-
-    await Pericias.create({ 
-      personagem_id: personagemId, 
-      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao 
+    await Informacoes.create({ personagem_id: personagem.id, pontos_vida, pontos_esforco, defesa, sanidade });
+    await Atributos.create({ personagem_id: personagem.id, agilidade, inteligencia, presenca, forca, vigor });
+    await Pericias.create({
+      personagem_id: personagem.id,
+      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
     });
 
-    res.status(201).json({ id: personagemId, message: 'Personagem criado com sucesso!' });
+    res.status(201).json({ id: personagem.id, message: 'Personagem criado com sucesso!' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+// Buscar todos os personagens
 exports.getAllPersonagens = async (req, res) => {
   try {
     const personagens = await Personagem.findAll();
@@ -38,47 +38,38 @@ exports.getAllPersonagens = async (req, res) => {
   }
 };
 
+// Buscar personagem com informações completas
 exports.getPersonagemById = async (req, res) => {
   try {
-    const personagem = await Personagem.findById(req.params.id);
+    const personagem = await Personagem.findByPk(req.params.id, {
+      include: [Informacoes, Atributos, Pericias]
+    });
+
     if (!personagem) {
       return res.status(404).json({ message: 'Personagem não encontrado' });
     }
 
-    const informacoes = await Informacoes.findByPersonagemId(req.params.id);
-    const atributos = await Atributos.findByPersonagemId(req.params.id);
-    const pericias = await Pericias.findByPersonagemId(req.params.id);
-
-    res.json({
-      ...personagem,
-      informacoes,
-      atributos,
-      pericias
-    });
+    res.json(personagem);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+// Atualizar personagem e dependentes
 exports.updatePersonagem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { 
+    const {
       nome, origem, classe, nex, deslocamento,
       pontos_vida, pontos_esforco, defesa, sanidade,
       agilidade, inteligencia, presenca, forca, vigor,
       diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
     } = req.body;
 
-    await Personagem.update(id, { nome, origem, classe, nex, deslocamento });
-
-    await Informacoes.update(id, { pontos_vida, pontos_esforco, defesa, sanidade });
-
-    await Atributos.update(id, { agilidade, inteligencia, presenca, forca, vigor });
-    
-    await Pericias.update(id, { 
-      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao 
-    });
+    await Personagem.update({ nome, origem, classe, nex, deslocamento }, { where: { id } });
+    await Informacoes.update({ pontos_vida, pontos_esforco, defesa, sanidade }, { where: { personagem_id: id } });
+    await Atributos.update({ agilidade, inteligencia, presenca, forca, vigor }, { where: { personagem_id: id } });
+    await Pericias.update({ diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao }, { where: { personagem_id: id } });
 
     res.json({ message: 'Personagem atualizado com sucesso!' });
   } catch (error) {
@@ -86,9 +77,16 @@ exports.updatePersonagem = async (req, res) => {
   }
 };
 
+// Deletar personagem e dependentes
 exports.deletePersonagem = async (req, res) => {
   try {
-    await Personagem.delete(req.params.id);
+    const { id } = req.params;
+
+    await Informacoes.destroy({ where: { personagem_id: id } });
+    await Atributos.destroy({ where: { personagem_id: id } });
+    await Pericias.destroy({ where: { personagem_id: id } });
+    await Personagem.destroy({ where: { id } });
+
     res.json({ message: 'Personagem deletado com sucesso!' });
   } catch (error) {
     res.status(500).json({ message: error.message });

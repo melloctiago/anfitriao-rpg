@@ -1,24 +1,43 @@
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const Personagem = require('./Personagem');
 
-class Atributos {
-  static async create({ personagem_id, agilidade, inteligencia, presenca, forca, vigor }) {
-    await db.execute(
-      'INSERT INTO atributos_personagem (personagem_id, agilidade, inteligencia, presenca, forca, vigor) VALUES (?, ?, ?, ?, ?, ?)',
-      [personagem_id, agilidade, inteligencia, presenca, forca, vigor]
-    );
+const AtributosPersonagem = sequelize.define('AtributosPersonagem', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  personagem_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Personagem,
+      key: 'id'
+    }
+  },
+  agilidade: {
+    type: DataTypes.INTEGER
+  },
+  inteligencia: {
+    type: DataTypes.INTEGER
+  },
+  presenca: {
+    type: DataTypes.INTEGER
+  },
+  forca: {
+    type: DataTypes.INTEGER
+  },
+  vigor: {
+    type: DataTypes.INTEGER
   }
+}, {
+  tableName: 'atributos_personagem',
+  timestamps: false
+});
 
-  static async findByPersonagemId(personagem_id) {
-    const [rows] = await db.execute('SELECT * FROM atributos_personagem WHERE personagem_id = ?', [personagem_id]);
-    return rows[0];
-  }
+// Associação com Personagem
+AtributosPersonagem.belongsTo(Personagem, { foreignKey: 'personagem_id' });
+Personagem.hasOne(AtributosPersonagem, { foreignKey: 'personagem_id' });
 
-  static async update(personagem_id, { agilidade, inteligencia, presenca, forca, vigor }) {
-    await db.execute(
-      'UPDATE atributos_personagem SET agilidade = ?, inteligencia = ?, presenca = ?, forca = ?, vigor = ? WHERE personagem_id = ?',
-      [agilidade, inteligencia, presenca, forca, vigor, personagem_id]
-    );
-  }
-}
-
-module.exports = Atributos;
+module.exports = AtributosPersonagem;

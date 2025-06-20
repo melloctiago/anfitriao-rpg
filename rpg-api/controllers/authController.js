@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-// Chave secreta (use uma variável de ambiente na prática)
 const SECRET = 'sua_chave_secreta';
 
-// Simulação de usuário do banco de dados
+//só to mockando pq ainda não tenho a tabela
 const usuarioFalso = {
     id: 1,
     nome: 'admin',
@@ -22,7 +21,7 @@ exports.login = (req, res) => {
     const token = jwt.sign(
         { id: usuarioFalso.id, email: usuarioFalso.email },
         SECRET,
-        { expiresIn: '1h' } // expira em 1 hora
+        { expiresIn: '1h' } // configura a expiração do token
     );
 
     res.json({ auth: true, token });
