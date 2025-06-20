@@ -8,16 +8,6 @@ const sequelize = new Sequelize('rpg', 'root', '', {
 
 module.exports = sequelize;
 
-
-
-
-
-
-
-
-
-
-
 // const mysql = require('mysql2');
 
 // const pool = mysql.createPool({

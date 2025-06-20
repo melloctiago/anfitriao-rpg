@@ -7,19 +7,53 @@ const Pericias = require('../models/PericiasPersonagem');
 exports.createPersonagem = async (req, res) => {
   try {
     const {
-      nome, origem, classe, nex, deslocamento,
-      pontos_vida, pontos_esforco, defesa, sanidade,
-      agilidade, inteligencia, presenca, forca, vigor,
-      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
+      nome,
+      origem,
+      classe,
+      nex,
+      deslocamento,
+      pontos_vida,
+      pontos_esforco,
+      defesa,
+      sanidade,
+      agilidade,
+      inteligencia,
+      presenca,
+      forca,
+      vigor,
+      diplomacia,
+      enganacao,
+      sobrevivencia,
+      luta,
+      tecnologia,
+      intuicao
     } = req.body;
 
     const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento });
 
-    await Informacoes.create({ personagem_id: personagem.id, pontos_vida, pontos_esforco, defesa, sanidade });
-    await Atributos.create({ personagem_id: personagem.id, agilidade, inteligencia, presenca, forca, vigor });
+    await Informacoes.create({
+      personagem_id: personagem.id,
+      pontos_vida,
+      pontos_esforco,
+      defesa,
+      sanidade
+    });
+    await Atributos.create({
+      personagem_id: personagem.id,
+      agilidade,
+      inteligencia,
+      presenca,
+      forca,
+      vigor
+    });
     await Pericias.create({
       personagem_id: personagem.id,
-      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
+      diplomacia,
+      enganacao,
+      sobrevivencia,
+      luta,
+      tecnologia,
+      intuicao
     });
 
     res.status(201).json({ id: personagem.id, message: 'Personagem criado com sucesso!' });
@@ -60,16 +94,41 @@ exports.updatePersonagem = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      nome, origem, classe, nex, deslocamento,
-      pontos_vida, pontos_esforco, defesa, sanidade,
-      agilidade, inteligencia, presenca, forca, vigor,
-      diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao
+      nome,
+      origem,
+      classe,
+      nex,
+      deslocamento,
+      pontos_vida,
+      pontos_esforco,
+      defesa,
+      sanidade,
+      agilidade,
+      inteligencia,
+      presenca,
+      forca,
+      vigor,
+      diplomacia,
+      enganacao,
+      sobrevivencia,
+      luta,
+      tecnologia,
+      intuicao
     } = req.body;
 
     await Personagem.update({ nome, origem, classe, nex, deslocamento }, { where: { id } });
-    await Informacoes.update({ pontos_vida, pontos_esforco, defesa, sanidade }, { where: { personagem_id: id } });
-    await Atributos.update({ agilidade, inteligencia, presenca, forca, vigor }, { where: { personagem_id: id } });
-    await Pericias.update({ diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao }, { where: { personagem_id: id } });
+    await Informacoes.update(
+      { pontos_vida, pontos_esforco, defesa, sanidade },
+      { where: { personagem_id: id } }
+    );
+    await Atributos.update(
+      { agilidade, inteligencia, presenca, forca, vigor },
+      { where: { personagem_id: id } }
+    );
+    await Pericias.update(
+      { diplomacia, enganacao, sobrevivencia, luta, tecnologia, intuicao },
+      { where: { personagem_id: id } }
+    );
 
     res.json({ message: 'Personagem atualizado com sucesso!' });
   } catch (error) {

@@ -1,56 +1,56 @@
 .slider-input-container {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .slider-input-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
 .value-display {
-    font-weight: normal;
-    color: #9172b8;
+  font-weight: normal;
+  color: #9172b8;
 }
 
 .slider-input-group {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .slider {
-    flex-grow: 1;
-    height: 8px;
-    -webkit-appearance: none;
-    background: #b695dd;
-    border-radius: 4px;
-    outline: none;
+  flex-grow: 1;
+  height: 8px;
+  -webkit-appearance: none;
+  background: #b695dd;
+  border-radius: 4px;
+  outline: none;
 }
 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    background: #9172b8;
-    border-radius: 50%;
-    cursor: pointer;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #9172b8;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .number-input {
-    width: 70px;
-    padding: 8px;
-    border: 1px solid #b695dd;
-    border-radius: 4px;
-    text-align: center;
+  width: 70px;
+  padding: 8px;
+  border: 1px solid #b695dd;
+  border-radius: 4px;
+  text-align: center;
 }
 
 .number-input::-webkit-outer-spin-button,
 .number-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.number-input[type=number] {
-    -moz-appearance: textfield;
+.number-input[type='number'] {
+  -moz-appearance: textfield;
 }

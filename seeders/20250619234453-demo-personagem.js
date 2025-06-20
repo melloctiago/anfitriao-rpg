@@ -10,7 +10,7 @@ module.exports = {
         deslocamento: 8
       },
       {
-        id:2,
+        id: 2,
         nome: 'Olivier Florence',
         origem: 'Universitário ',
         classe: 'Especialista',

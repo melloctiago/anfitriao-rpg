@@ -30,13 +30,13 @@ body {
 .logo-title-container {
   display: flex;
   align-items: center;
-  gap: 10px; 
+  gap: 10px;
 }
 
 .navbar-logo {
   height: 100px;
-  width: auto; 
-  max-width: 100%; 
+  width: auto;
+  max-width: 100%;
 }
 
 .links a {
@@ -49,7 +49,7 @@ body {
 .links a:hover {
   color: #7e60a5;
 }
- 
+
 /* Formulário */
 .personagem-form {
   background: white;
@@ -231,6 +231,6 @@ body {
   margin: 0;
 }
 
-.nex-input[type=number] {
+.nex-input[type='number'] {
   -moz-appearance: textfield;
 }
