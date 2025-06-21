@@ -2,8 +2,7 @@ const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('rpg', 'root', '', {
   host: 'localhost',
-  dialect: 'mysql',
-  logging: false
+  dialect: 'mysql'
 });
 
 module.exports = sequelize;

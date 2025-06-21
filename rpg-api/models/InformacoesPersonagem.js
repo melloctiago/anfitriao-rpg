@@ -1,9 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/db');
 const Personagem = require('./Personagem');
 
-const AtributosPersonagem = sequelize.define(
-  'AtributosPersonagem',
+const InformacoesPersonagem = sequelize.define(
+  'InformacoesPersonagem',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -18,30 +18,26 @@ const AtributosPersonagem = sequelize.define(
         key: 'id'
       }
     },
-    agilidade: {
+    pontos_vida: {
       type: DataTypes.INTEGER
     },
-    inteligencia: {
+    pontos_esforco: {
       type: DataTypes.INTEGER
     },
-    presenca: {
+    defesa: {
       type: DataTypes.INTEGER
     },
-    forca: {
-      type: DataTypes.INTEGER
-    },
-    vigor: {
+    sanidade: {
       type: DataTypes.INTEGER
     }
   },
   {
-    tableName: 'atributos_personagem',
+    tableName: 'informacoes_personagem',
     timestamps: false
   }
 );
 
-// Associação com Personagem
-AtributosPersonagem.belongsTo(Personagem, { foreignKey: 'personagem_id' });
-Personagem.hasOne(AtributosPersonagem, { foreignKey: 'personagem_id' });
+InformacoesPersonagem.belongsTo(Personagem, { foreignKey: 'personagem_id' });
+Personagem.hasOne(InformacoesPersonagem, { foreignKey: 'personagem_id' });
 
-module.exports = AtributosPersonagem;
+module.exports = InformacoesPersonagem;
