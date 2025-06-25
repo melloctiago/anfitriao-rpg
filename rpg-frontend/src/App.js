@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import NovoPersonagem from './pages/NovoPersonagem';
 import EditarPersonagem from './pages/EditarPersonagem';
+import Login from './pages/Login';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Navbar />
         <div className="content">
           <Routes>
+            <Route path="/login" element={<Login/>} />
             <Route path="/" element={<HomePage />} />
             <Route path="/novo" element={<NovoPersonagem />} />
             <Route path="/editar/:id" element={<EditarPersonagem />} />
