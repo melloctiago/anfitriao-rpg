@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
+const apiAuth = require('./routes/auth')
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/api', apiAuth);
 app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
