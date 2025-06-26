@@ -1,26 +1,52 @@
-'use strict';
-const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  User.init(
-    {
-      nome: DataTypes.STRING,
-      email: DataTypes.STRING,
-      senha: DataTypes.STRING
-    },
-    {
-      sequelize,
-      modelName: 'User'
-    }
-  );
-  return User;
+const { DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
+
+module.exports = (sequelize) => {
+    const User = sequelize.define('User', {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        nome: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true
+            }
+        },
+        senha: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
+    }, {
+        tableName: 'users',
+        timestamps: false,
+        hooks: {
+            beforeCreate: async (user) => {
+                if (user.senha) {
+                    const salt = await bcrypt.genSalt(10);
+                    user.senha = await bcrypt.hash(user.senha, salt);
+                }
+            },
+            beforeUpdate: async (user) => {
+                if (user.changed('senha')) {
+                    const salt = await bcrypt.genSalt(10);
+                    user.senha = await bcrypt.hash(user.senha, salt);
+                }
+            }
+        }
+    });
+
+    // Método para comparar senhas no login
+    User.prototype.validarSenha = async function (senha) {
+        return await bcrypt.compare(senha, this.senha);
+    };
+
+    return User;
 };
