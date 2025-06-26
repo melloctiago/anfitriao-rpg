@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-module.exports = (sequelize) => {
     const User = sequelize.define('User', {
         id: {
             type: DataTypes.INTEGER,
@@ -48,5 +47,4 @@ module.exports = (sequelize) => {
         return await bcrypt.compare(senha, this.senha);
     };
 
-    return User;
-};
+    module.exports = User;
