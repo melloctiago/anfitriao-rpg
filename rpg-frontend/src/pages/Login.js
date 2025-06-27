@@ -16,7 +16,9 @@ export default function Login() {
       console.log('Resposta do backend:', res.data); 
 
       setToken(res.data.token);
-      navigate('/home');
+
+      localStorage.setItem('token', res.data.token)
+      navigate('/');
     } catch (err) {
       console.error('Erro no login:', err.response?.data || err.message); 
       alert('Login falhou');
