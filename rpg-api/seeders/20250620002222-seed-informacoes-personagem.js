@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           personagem_id: 1,
-          pontos_vida: 100,
+          pontos_vida: 10,
           pontos_esforco: 50,
           defesa: 15,
           sanidade: 80

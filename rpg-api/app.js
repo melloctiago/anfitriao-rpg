@@ -1,17 +1,21 @@
+require('dotenv').config;
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
-const apiAuth = require('./routes/auth')
-
+const authRoutes = require('./routes/auth')
+const uploadRoutes = require('./routes/upload')
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api', apiAuth);
+// app.use('/uploads', express.static(path.resolve('uploads')));
+
+app.use('/api', authRoutes);
 app.use('/api', apiRoutes);
+// app.use('/api', uploadRoutes);
 
 app.get('/', (req, res) => {
   res.send('API do Anfitrião');

@@ -1,6 +1,7 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const SECRET = process.env.JWT_SECRET || 'vibesveganas'
+const { User } = require('../models');
 
 exports.login = async (req, res) => {
   const { email, senha } = req.body;
@@ -22,10 +23,11 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'segredo123',
+      SECRET,
       { expiresIn: '1h' }
     );
 
+    console.log(token)
     console.log('Login bem-sucedido para:', email);
 
     res.json({ token });

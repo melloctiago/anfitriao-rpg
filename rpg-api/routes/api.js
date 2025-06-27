@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 // isso vai protejer todas as rotas
 router.use(authMiddleware);
-console.log('abacaxi');
+
 router.post('/personagens', personagemController.createPersonagem);
 router.get('/personagens', personagemController.getAllPersonagens);
 router.get('/personagens/:id', personagemController.getPersonagemById);

@@ -1,7 +1,8 @@
-const Personagem = require('../models/Personagem');
-const InformacoesPersonagem = require('../models/InformacoesPersonagem');
-const AtributosPersonagem = require('../models/AtributosPersonagem');
-const PericiasPersonagem = require('../models/PericiasPersonagem');
+const db = require('../models');
+const { Personagem } = db;
+const { InformacoesPersonagem } = db;
+const { AtributosPersonagem } = db;
+const { PericiasPersonagem } = db;
 
 // Criar personagem com todos os dados
 exports.createPersonagem = async (req, res) => {
@@ -76,7 +77,17 @@ exports.getAllPersonagens = async (req, res) => {
 exports.getPersonagemById = async (req, res) => {
   try {
     const personagem = await Personagem.findByPk(req.params.id, {
-      include: [InformacoesPersonagem, AtributosPersonagem, PericiasPersonagem]
+      include: [
+        {
+          association: 'informacoes' 
+        },
+        {
+          association: 'atributos' 
+        },
+        {
+          association: 'pericias'
+        }
+      ]
     });
 
     if (!personagem) {
