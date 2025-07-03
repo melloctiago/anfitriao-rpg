@@ -1,34 +1,32 @@
-import React from 'react';
-import AuthForm from '../components/AuthForm';
-import api from '../services/api';
-import { setToken } from '../utils/auth';
+import { useState } from 'react';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async ({ email, senha }) => {
-    console.log('Tentando logar com:', email, senha); 
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
     try {
       const res = await api.post('/login', { email, senha });
-
-      console.log('Resposta do backend:', res.data); 
-
-      setToken(res.data.token);
-
-      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('token', res.data.token);
+      alert('Login realizado!');
       navigate('/');
     } catch (err) {
-      console.error('Erro no login:', err.response?.data || err.message); 
-      alert('Login falhou');
+      console.error(err);
+      alert('Email ou senha inválidos.');
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <h2>Login</h2>
-      <AuthForm onSubmit={handleLogin} />
-    </div>
+      <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+      <button type="submit">Entrar</button>
+    </form>
   );
 }
