@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import CampoPericia from './CampoPericia';
 import SliderInput from './SliderInput';
+import ImageUpload from './ImageUpload'; // NOVO: Importação do componente de upload
 
 function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const [formData, setFormData] = useState({
     nome: '',
     origem: '',
     classe: '',
+    imagem_url: '', // NOVO: Campo para armazenar o nome/caminho da imagem
     nex: 0,
     deslocamento: 0,
     pontos_vida: 0,
@@ -49,6 +51,10 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
         nome: personagem.nome,
         origem: personagem.origem,
         classe: personagem.classe,
+        // NOVO: Popula a imagem_url se o personagem já tiver uma.
+        // Assumi que a propriedade se chama 'imagem_url' no seu objeto 'personagem'.
+        // Se o nome for diferente, ajuste aqui.
+        imagem_url: personagem.imagem_url || '',
         nex: personagem.nex,
         deslocamento: personagem.deslocamento,
         pontos_vida: personagem.informacoes.pontos_vida,
@@ -70,6 +76,14 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
     }
   }, [personagem]);
 
+  // NOVO: Função para lidar com o sucesso do upload
+  const handleUploadSuccess = (fileData) => {
+    setFormData({
+      ...formData,
+      imagem_url: fileData.filename // Armazena apenas o nome do arquivo no estado do formulário
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -79,30 +93,16 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   };
 
   const validate = () => {
+    // Nenhuma alteração aqui
     const newErrors = {};
     const requiredFields = [
-      'nome',
-      'origem',
-      'classe',
-      'nex',
-      'deslocamento',
-      'pontos_vida',
-      'pontos_esforco',
-      'defesa',
-      'sanidade',
-      'agilidade',
-      'inteligencia',
-      'presenca',
-      'forca',
-      'vigor'
+      'nome', 'origem', 'classe', 'nex', 'deslocamento',
+      'pontos_vida', 'pontos_esforco', 'defesa', 'sanidade',
+      'agilidade', 'inteligencia', 'presenca', 'forca', 'vigor'
     ];
-
     requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = 'Este campo é obrigatório';
-      }
+      if (!formData[field]) { newErrors[field] = 'Este campo é obrigatório'; }
     });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -110,6 +110,7 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      // Nenhuma alteração aqui. A 'imagem_url' já está no formData e será enviada.
       onSubmit(formData);
     }
   };
@@ -120,6 +121,23 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
 
       <div className="form-section">
         <h3>Informações Básicas</h3>
+
+        {/* NOVO: Seção para upload e prévia da imagem */}
+        <div className="form-group">
+          <label>Imagem do Personagem:</label>
+          <ImageUpload onUploadSuccess={handleUploadSuccess} />
+          {formData.imagem_url && (
+            <div className="image-preview" style={{ marginTop: '10px' }}>
+              <p>Prévia:</p>
+              <img
+                src={`http://localhost:3001/uploads/${formData.imagem_url}`}
+                alt="Prévia do personagem"
+                style={{ maxWidth: '150px', borderRadius: '8px' }}
+              />
+            </div>
+          )}
+        </div>
+
         <div className="form-group">
           <label>Nome:</label>
           <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
@@ -173,6 +191,7 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
         </div>
       </div>
 
+      {/* Nenhuma alteração necessária no restante do formulário */}
       <SliderInput
         label="NEX"
         name="nex"
@@ -310,6 +329,7 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
           onChange={handleChange}
         />
       </div>
+
 
       <button type="submit" className="submit-btn">
         {isEditing ? 'Atualizar Personagem' : 'Criar Personagem'}

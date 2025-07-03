@@ -8,6 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'vibesveganas';
 class AuthService {
   static async registrarUsuario({ nome, email, senha, confirmPassword }) {
     if (!nome || !email || !senha || !confirmPassword) {
+      console.log("chegou aquir")
       throw new Error('Por favor, preencha todos os campos');
     }
 
@@ -47,19 +48,19 @@ class AuthService {
     if (!email || !senha) {
       throw new Error('Por favor, informe email e senha');
     }
-    console.log("chegou aquir")
     const usuario = await User.findOne({ where: { email } });
     if (!usuario) {
       throw new Error('Email ou senha incorretos');
     }
 
+        console.log(senha, usuario.senha)
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
     if (!senhaCorreta) {
       throw new Error('Email ou senha incorretos');
     }
 
     const token = jwt.sign({ id: usuario.id }, JWT_SECRET, { expiresIn: '1h' });
-    
+        
     return {
       token,
       usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email },
