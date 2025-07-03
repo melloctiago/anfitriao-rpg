@@ -65,7 +65,8 @@ export default function AuthForm({ onSubmit, isRegister = false }) {
                     required
                 />
             </div>
-            <button type="submit">{isRegister ? 'Cadastrar' : 'Entrar'}</button>
+            <button type="submit">Cadastrar</button>
+            <button type="submit">Entrar</button>
         </form>
     );
 }

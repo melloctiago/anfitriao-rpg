@@ -13,6 +13,7 @@ exports.createPersonagem = async (req, res) => {
       classe,
       nex,
       deslocamento,
+      imagem_url,
       pontos_vida,
       pontos_esforco,
       defesa,
@@ -30,7 +31,8 @@ exports.createPersonagem = async (req, res) => {
       intuicao
     } = req.body;
 
-    const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento });
+    
+    const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento, imagem_url });
 
     await InformacoesPersonagem.create({
       personagem_id: personagem.id,
@@ -110,6 +112,7 @@ exports.updatePersonagem = async (req, res) => {
       classe,
       nex,
       deslocamento,
+      imagem_url,
       pontos_vida,
       pontos_esforco,
       defesa,
@@ -127,7 +130,7 @@ exports.updatePersonagem = async (req, res) => {
       intuicao
     } = req.body;
 
-    await Personagem.update({ nome, origem, classe, nex, deslocamento }, { where: { id } });
+    await Personagem.update({ nome, origem, classe, nex, deslocamento, imagem_url }, { where: { id } });
     await InformacoesPersonagem.update(
       { pontos_vida, pontos_esforco, defesa, sanidade },
       { where: { personagem_id: id } }

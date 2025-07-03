@@ -2,6 +2,8 @@ require('dotenv').config;
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
+
 const apiRoutes = require('./routes/api');
 const authRoutes = require('./routes/auth')
 const uploadRoutes = require('./routes/upload')
@@ -11,11 +13,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/uploads', express.static(path.resolve('uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api', authRoutes);
 app.use('/api', apiRoutes);
-// app.use('/api', uploadRoutes);
+app.use('/api', uploadRoutes);
 
 app.get('/', (req, res) => {
   res.send('API do Anfitrião');

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       deslocamento: {
         type: DataTypes.INTEGER
+      },
+      imagem_url: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {

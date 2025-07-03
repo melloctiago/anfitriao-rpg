@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import CampoPericia from './CampoPericia';
 import SliderInput from './SliderInput';
+import ImageUpload from './ImageUpload';
 
 function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const [formData, setFormData] = useState({
     nome: '',
     origem: '',
     classe: '',
+    imagem_url: '',
     nex: 0,
     deslocamento: 0,
     pontos_vida: 0,
@@ -49,6 +51,7 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
         nome: personagem.nome,
         origem: personagem.origem,
         classe: personagem.classe,
+        imagem_url: personagem.imagem_url || '',
         nex: personagem.nex,
         deslocamento: personagem.deslocamento,
         pontos_vida: personagem.informacoes.pontos_vida,
@@ -70,6 +73,13 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
     }
   }, [personagem]);
 
+  const handleUploadSuccess = (fileData) => {
+    setFormData(prevState => ({
+      ...prevState,
+      imagem_url: fileData.filename
+    }));
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -81,28 +91,13 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const validate = () => {
     const newErrors = {};
     const requiredFields = [
-      'nome',
-      'origem',
-      'classe',
-      'nex',
-      'deslocamento',
-      'pontos_vida',
-      'pontos_esforco',
-      'defesa',
-      'sanidade',
-      'agilidade',
-      'inteligencia',
-      'presenca',
-      'forca',
-      'vigor'
+      'nome', 'origem', 'classe', 'nex', 'deslocamento',
+      'pontos_vida', 'pontos_esforco', 'defesa', 'sanidade',
+      'agilidade', 'inteligencia', 'presenca', 'forca', 'vigor'
     ];
-
     requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = 'Este campo é obrigatório';
-      }
+      if (!formData[field]) { newErrors[field] = 'Este campo é obrigatório'; }
     });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -110,65 +105,99 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      console.log('Dados enviados para o backend:', formData);
       onSubmit(formData);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="personagem-form">
       <h2>{isEditing ? 'Editar Personagem' : 'Criar Personagem'}</h2>
 
-      <div className="form-section">
-        <h3>Informações Básicas</h3>
-        <div className="form-group">
-          <label>Nome:</label>
-          <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
-          {errors.nome && <span className="error">{errors.nome}</span>}
-        </div>
-        <div className="form-group">
-          <label>Origem:</label>
-          <select name="origem" value={formData.origem} onChange={handleChange} required>
-            {opcoesOrigens.map((opcao) => (
-              <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
-                {opcao.label}
-              </option>
-            ))}
-          </select>
-          {errors.origem && <span className="error">{errors.origem}</span>}
-        </div>
-        <div className="form-group">
-          <label>Classe:</label>
-          <select name="classe" value={formData.classe} onChange={handleChange} required>
-            {opcoesClasse.map((opcao) => (
-              <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
-                {opcao.label}
-              </option>
-            ))}
-          </select>
-          {errors.classe && <span className="error">{errors.classe}</span>}
+      <div className="form-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '30px', marginBottom: '20px' }}>
+
+        <div className="profile-image-section" style={{ flexShrink: 0 }}>
+          <label>Imagem do Personagem:</label>
+
+          {formData.imagem_url ? (
+            <img
+              src={`http://localhost:3000/uploads/${formData.imagem_url}`}
+              alt="Prévia do personagem"
+              style={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2px solid #ccc',
+                display: 'block',
+                marginBottom: '10px'
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '150px',
+              height: '150px',
+              borderRadius: '50%',
+              backgroundColor: '#f0f0f0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#888',
+              border: '2px dashed #ccc',
+              marginBottom: '10px',
+              textAlign: 'center'
+            }}>
+              Sem Imagem
+            </div>
+          )}
+
+          <ImageUpload onUploadSuccess={handleUploadSuccess} />
         </div>
 
+        <div className="basic-info-fields" style={{ flexGrow: 1 }}>
+          <div className="form-group">
+            <label>Nome:</label>
+            <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
+            {errors.nome && <span className="error">{errors.nome}</span>}
+          </div>
+          <div className="form-group">
+            <label>Origem:</label>
+            <select name="origem" value={formData.origem} onChange={handleChange} required>
+              {opcoesOrigens.map((opcao) => (
+                <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
+                  {opcao.label}
+                </option>
+              ))}
+            </select>
+            {errors.origem && <span className="error">{errors.origem}</span>}
+          </div>
+          <div className="form-group">
+            <label>Classe:</label>
+            <select name="classe" value={formData.classe} onChange={handleChange} required>
+              {opcoesClasse.map((opcao) => (
+                <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
+                  {opcao.label}
+                </option>
+              ))}
+            </select>
+            {errors.classe && <span className="error">{errors.classe}</span>}
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div className="form-section">
+        <h3>Informações de Jogo</h3>
         <div className="form-group">
           <label>Deslocamento:</label>
-          <input
-            type="number"
-            name="deslocamento"
-            value={formData.deslocamento}
-            onChange={handleChange}
-            min="0"
-          />
+          <input type="number" name="deslocamento" value={formData.deslocamento} onChange={handleChange} min="0" />
           {errors.deslocamento && <span className="error">{errors.deslocamento}</span>}
         </div>
-
         <div className="form-group">
           <label>Defesa:</label>
-          <input
-            type="number"
-            name="defesa"
-            value={formData.defesa}
-            onChange={handleChange}
-            min="0"
-          />
+          <input type="number" name="defesa" value={formData.defesa} onChange={handleChange} min="0" />
           {errors.defesa && <span className="error">{errors.defesa}</span>}
         </div>
       </div>
@@ -311,9 +340,11 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
         />
       </div>
 
+
       <button type="submit" className="submit-btn">
         {isEditing ? 'Atualizar Personagem' : 'Criar Personagem'}
       </button>
+
     </form>
   );
 }

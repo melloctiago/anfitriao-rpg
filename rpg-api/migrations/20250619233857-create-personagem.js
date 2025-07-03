@@ -13,7 +13,11 @@ module.exports = {
       origem: Sequelize.STRING,
       classe: Sequelize.STRING,
       nex: Sequelize.INTEGER,
-      deslocamento: Sequelize.INTEGER
+      deslocamento: Sequelize.INTEGER,
+      imagem_url: {
+        type: Sequelize.STRING,
+        allowNull: true
+      }
     });
   },
 

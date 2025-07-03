@@ -1,6 +1,6 @@
 'use strict';
 
-const Sequelize = require('sequelize');
+const Sequelize = require('Sequelize');
 const sequelize = require('../config/db');
 
 // Import all models

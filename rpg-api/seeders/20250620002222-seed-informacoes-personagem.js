@@ -12,6 +12,14 @@ module.exports = {
           defesa: 15,
           sanidade: 80
         }
+      ,
+      {
+        personagem_id: 2,
+        pontos_vida: 10,
+        pontos_esforco: 50,
+        defesa: 15,
+        sanidade: 80
+      }
       ],
       {}
     );

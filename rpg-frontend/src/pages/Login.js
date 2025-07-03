@@ -1,34 +1,58 @@
-import React from 'react';
-import AuthForm from '../components/AuthForm';
+import { useState } from 'react';
 import api from '../services/api';
-import { setToken } from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async ({ email, senha }) => {
-    console.log('Tentando logar com:', email, senha); 
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const res = await api.post('/login', { email, senha });
-
-      console.log('Resposta do backend:', res.data); 
-
-      setToken(res.data.token);
-
-      localStorage.setItem('token', res.data.token)
-      navigate('/');
+      localStorage.setItem('token', res.data.token);
+      navigate('/home');
     } catch (err) {
-      console.error('Erro no login:', err.response?.data || err.message); 
-      alert('Login falhou');
+      const errorMessage = err.response?.data?.message || 'Email ou senha inválidos.';
+      setError(errorMessage);
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <h2>Login</h2>
-      <AuthForm onSubmit={handleLogin} />
-    </div>
+      <input
+        type="email"
+        placeholder="E-mail"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        value={senha}
+        onChange={(e) => setSenha(e.target.value)}
+        required
+      />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <button type="submit" disabled={loading}>
+        {loading ? 'Entrando...' : 'Entrar'}
+      </button>
+            <button 
+          type="button" 
+          onClick={() => navigate('/register')}
+        >
+          Cadastrar
+        </button>
+    </form>
   );
 }
