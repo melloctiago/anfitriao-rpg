@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import CampoPericia from './CampoPericia';
 import SliderInput from './SliderInput';
-import ImageUpload from './ImageUpload'; // NOVO: Importação do componente de upload
+import ImageUpload from './ImageUpload';
 
 function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const [formData, setFormData] = useState({
     nome: '',
     origem: '',
     classe: '',
-    imagem_url: '', // NOVO: Campo para armazenar o nome/caminho da imagem
+    imagem_url: '',
     nex: 0,
     deslocamento: 0,
     pontos_vida: 0,
@@ -51,9 +51,6 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
         nome: personagem.nome,
         origem: personagem.origem,
         classe: personagem.classe,
-        // NOVO: Popula a imagem_url se o personagem já tiver uma.
-        // Assumi que a propriedade se chama 'imagem_url' no seu objeto 'personagem'.
-        // Se o nome for diferente, ajuste aqui.
         imagem_url: personagem.imagem_url || '',
         nex: personagem.nex,
         deslocamento: personagem.deslocamento,
@@ -76,12 +73,11 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
     }
   }, [personagem]);
 
-  // NOVO: Função para lidar com o sucesso do upload
   const handleUploadSuccess = (fileData) => {
-    setFormData({
-      ...formData,
-      imagem_url: fileData.filename // Armazena apenas o nome do arquivo no estado do formulário
-    });
+    setFormData(prevState => ({
+      ...prevState,
+      imagem_url: fileData.filename
+    }));
   };
 
   const handleChange = (e) => {
@@ -93,7 +89,6 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   };
 
   const validate = () => {
-    // Nenhuma alteração aqui
     const newErrors = {};
     const requiredFields = [
       'nome', 'origem', 'classe', 'nex', 'deslocamento',
@@ -110,88 +105,103 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      // Nenhuma alteração aqui. A 'imagem_url' já está no formData e será enviada.
+      console.log('Dados enviados para o backend:', formData);
       onSubmit(formData);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="personagem-form">
       <h2>{isEditing ? 'Editar Personagem' : 'Criar Personagem'}</h2>
 
-      <div className="form-section">
-        <h3>Informações Básicas</h3>
+      <div className="form-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '30px', marginBottom: '20px' }}>
 
-        {/* NOVO: Seção para upload e prévia da imagem */}
-        <div className="form-group">
+        <div className="profile-image-section" style={{ flexShrink: 0 }}>
           <label>Imagem do Personagem:</label>
-          <ImageUpload onUploadSuccess={handleUploadSuccess} />
-          {formData.imagem_url && (
-            <div className="image-preview" style={{ marginTop: '10px' }}>
-              <p>Prévia:</p>
-              <img
-                src={`http://localhost:3001/uploads/${formData.imagem_url}`}
-                alt="Prévia do personagem"
-                style={{ maxWidth: '150px', borderRadius: '8px' }}
-              />
+
+          {formData.imagem_url ? (
+            <img
+              src={`http://localhost:3000/uploads/${formData.imagem_url}`}
+              alt="Prévia do personagem"
+              style={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2px solid #ccc',
+                display: 'block',
+                marginBottom: '10px'
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '150px',
+              height: '150px',
+              borderRadius: '50%',
+              backgroundColor: '#f0f0f0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#888',
+              border: '2px dashed #ccc',
+              marginBottom: '10px',
+              textAlign: 'center'
+            }}>
+              Sem Imagem
             </div>
           )}
+
+          <ImageUpload onUploadSuccess={handleUploadSuccess} />
         </div>
 
-        <div className="form-group">
-          <label>Nome:</label>
-          <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
-          {errors.nome && <span className="error">{errors.nome}</span>}
+        <div className="basic-info-fields" style={{ flexGrow: 1 }}>
+          <div className="form-group">
+            <label>Nome:</label>
+            <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
+            {errors.nome && <span className="error">{errors.nome}</span>}
+          </div>
+          <div className="form-group">
+            <label>Origem:</label>
+            <select name="origem" value={formData.origem} onChange={handleChange} required>
+              {opcoesOrigens.map((opcao) => (
+                <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
+                  {opcao.label}
+                </option>
+              ))}
+            </select>
+            {errors.origem && <span className="error">{errors.origem}</span>}
+          </div>
+          <div className="form-group">
+            <label>Classe:</label>
+            <select name="classe" value={formData.classe} onChange={handleChange} required>
+              {opcoesClasse.map((opcao) => (
+                <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
+                  {opcao.label}
+                </option>
+              ))}
+            </select>
+            {errors.classe && <span className="error">{errors.classe}</span>}
+          </div>
         </div>
-        <div className="form-group">
-          <label>Origem:</label>
-          <select name="origem" value={formData.origem} onChange={handleChange} required>
-            {opcoesOrigens.map((opcao) => (
-              <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
-                {opcao.label}
-              </option>
-            ))}
-          </select>
-          {errors.origem && <span className="error">{errors.origem}</span>}
-        </div>
-        <div className="form-group">
-          <label>Classe:</label>
-          <select name="classe" value={formData.classe} onChange={handleChange} required>
-            {opcoesClasse.map((opcao) => (
-              <option key={opcao.valor} value={opcao.valor} disabled={opcao.valor === ''}>
-                {opcao.label}
-              </option>
-            ))}
-          </select>
-          {errors.classe && <span className="error">{errors.classe}</span>}
-        </div>
+      </div>
 
+      <hr />
+
+      <div className="form-section">
+        <h3>Informações de Jogo</h3>
         <div className="form-group">
           <label>Deslocamento:</label>
-          <input
-            type="number"
-            name="deslocamento"
-            value={formData.deslocamento}
-            onChange={handleChange}
-            min="0"
-          />
+          <input type="number" name="deslocamento" value={formData.deslocamento} onChange={handleChange} min="0" />
           {errors.deslocamento && <span className="error">{errors.deslocamento}</span>}
         </div>
-
         <div className="form-group">
           <label>Defesa:</label>
-          <input
-            type="number"
-            name="defesa"
-            value={formData.defesa}
-            onChange={handleChange}
-            min="0"
-          />
+          <input type="number" name="defesa" value={formData.defesa} onChange={handleChange} min="0" />
           {errors.defesa && <span className="error">{errors.defesa}</span>}
         </div>
       </div>
 
-      {/* Nenhuma alteração necessária no restante do formulário */}
       <SliderInput
         label="NEX"
         name="nex"
@@ -334,6 +344,7 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
       <button type="submit" className="submit-btn">
         {isEditing ? 'Atualizar Personagem' : 'Criar Personagem'}
       </button>
+
     </form>
   );
 }

@@ -27,7 +27,7 @@ function EditarPersonagem() {
   const handleSubmit = async (formData) => {
     try {
       await api.put(`/personagens/${id}`, formData);
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Erro ao atualizar personagem:', error);
     }
