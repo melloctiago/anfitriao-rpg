@@ -30,9 +30,9 @@ exports.createPersonagem = async (req, res) => {
       tecnologia,
       intuicao
     } = req.body;
+    const usuarioId = req.usuarioId;
 
-    
-    const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento, imagem_url });
+    const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento, imagem_url, usuario_id: usuarioId });
 
     await InformacoesPersonagem.create({
       personagem_id: personagem.id,
@@ -68,7 +68,13 @@ exports.createPersonagem = async (req, res) => {
 // Buscar todos os personagens
 exports.getAllPersonagens = async (req, res) => {
   try {
-    const personagens = await Personagem.findAll();
+    const personagens = await Personagem.findAll(
+      {
+        where: {
+          usuario_id: usuarioId
+        }
+      }
+    );
     res.json(personagens);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -81,10 +87,10 @@ exports.getPersonagemById = async (req, res) => {
     const personagem = await Personagem.findByPk(req.params.id, {
       include: [
         {
-          association: 'informacoes' 
+          association: 'informacoes'
         },
         {
-          association: 'atributos' 
+          association: 'atributos'
         },
         {
           association: 'pericias'

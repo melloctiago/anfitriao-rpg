@@ -31,7 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-
+  User.associate = function(models) {
+    User.hasMany(models.Personagem, {
+      foreignKey: 'usuario_id',
+      as: 'personagens' 
+    });
+  };
   // Método para comparar senhas no login
   User.prototype.validarSenha = async function (senha) {
     return await bcrypt.compare(senha, this.senha);
