@@ -7,6 +7,7 @@ import EditarPersonagem from './pages/EditarPersonagem';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import './App.css';
+import PrivateRoute from './components/PrivateRouter';
 
 function App() {
   return (
@@ -15,11 +16,23 @@ function App() {
         <Navbar />
         <div className="content">
           <Routes>
-            <Route path="/" element={<Login/>} />
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/novo" element={<NovoPersonagem />} />
-            <Route path="/editar/:id" element={<EditarPersonagem />} />
+            <Route path="/home" element={
+              <PrivateRoute>
+                <HomePage />
+              </PrivateRoute>
+            } />
+            <Route path="/novo" element={
+              <PrivateRoute>
+                <NovoPersonagem />
+              </PrivateRoute>
+            } />
+            <Route path="/editar/:id" element={
+              <PrivateRoute>
+                <EditarPersonagem />
+              </PrivateRoute>
+            } />
           </Routes>
         </div>
       </div>

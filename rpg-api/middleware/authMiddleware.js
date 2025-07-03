@@ -3,7 +3,6 @@ const authService = require('../services/authService');
 const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    console.log("chegou aqui mona")
     if (!authHeader) {
       return res.status(401).json({
         message: 'Token de acesso requerido',
