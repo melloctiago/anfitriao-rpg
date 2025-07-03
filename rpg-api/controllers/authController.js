@@ -1,38 +1,54 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const SECRET = process.env.JWT_SECRET || 'vibesveganas'
-const { User } = require('../models');
+const AuthService = require('../services/authService');
 
-exports.login = async (req, res) => {
-  const { email, senha } = req.body;
+class AuthController {
+  static async registro(req, res) {
+    try {
+      const resultado = await AuthService.registrarUsuario(req.body);
 
-  console.log('Tentativa de login com:', email);
+      res.status(201).json({
+        message: 'Usuário registrado com sucesso',
+        token: resultado.token,
+        usuarioId: resultado.usuarioId,
+      });
+    } catch (error) {
+      if (
+        error.message.includes('campos') ||
+        error.message.includes('senhas') ||
+        error.message.includes('Email inválido')
+      ) {
+        return res.status(400).json({ error: error.message });
+      }
 
-  try {
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      console.log('Usuário não encontrado:', email);
-      return res.status(401).json({ message: 'Usuário não encontrado' });
+      if (error.message === 'Email já está sendo utilizado') {
+        return res.status(409).json({ error: error.message });
+      }
+
+      res.status(500).json({ error: 'Erro interno no servidor' });
     }
-
-    const senhaValida = await bcrypt.compare(senha, user.senha);
-    if (!senhaValida) {
-      console.log('Senha incorreta para o usuário:', email);
-      return res.status(401).json({ message: 'Senha inválida' });
-    }
-
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      SECRET,
-      { expiresIn: '1h' }
-    );
-
-    console.log(token)
-    console.log('Login bem-sucedido para:', email);
-
-    res.json({ token });
-  } catch (error) {
-    console.error('Erro no login:', error.message);
-    res.status(500).json({ message: 'Erro ao fazer login', error: error.message });
   }
-};
+
+  static async login(req, res) {
+    try {
+      console.log("Chegou no auth controler pelo menos né veyr")
+      console.log(req.body)
+      const resultado = await AuthService.autenticarUsuario(req.body);
+
+      res.status(200).json({
+        message: 'Login realizado com sucesso',
+        token: resultado.token,
+        usuario: resultado.usuario,
+      });
+    } catch (error) {
+      if (
+        error.message.includes('Email ou senha') ||
+        error.message.includes('informe email')
+      ) {
+        return res.status(401).json({ error: error.message });
+      }
+
+      res.status(500).json({ error: 'Erro interno no servidor' });
+    }
+  }
+}
+
+module.exports = AuthController;

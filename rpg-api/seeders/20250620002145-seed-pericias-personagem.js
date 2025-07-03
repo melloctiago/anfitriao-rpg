@@ -13,6 +13,15 @@ module.exports = {
           luta: 5,
           tecnologia: 1,
           intuicao: 6
+        },
+        {
+          personagem_id: 2,
+          diplomacia: 2,
+          enganacao: 3,
+          sobrevivencia: 4,
+          luta: 5,
+          tecnologia: 1,
+          intuicao: 6
         }
       ],
       {}
