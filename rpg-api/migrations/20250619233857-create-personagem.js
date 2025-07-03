@@ -14,7 +14,6 @@ module.exports = {
       classe: Sequelize.STRING,
       nex: Sequelize.INTEGER,
       deslocamento: Sequelize.INTEGER,
-      // NOVO: Campo para armazenar o nome do arquivo da imagem
       imagem_url: {
         type: Sequelize.STRING,
         allowNull: true
