@@ -9,7 +9,7 @@ function NovoPersonagem() {
   const handleSubmit = async (formData) => {
     try {
       await api.post('/personagens', formData);
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Erro ao criar personagem:', error);
     }

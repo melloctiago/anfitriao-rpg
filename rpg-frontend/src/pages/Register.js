@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 export default function Register() {
   const [nome, setNome] = useState('');
@@ -19,9 +20,7 @@ export default function Register() {
       setError('As senhas não coincidem.');
       return;
     }
-
     setLoading(true);
-
     try {
       await api.post('/register', { nome, email, senha, confirmPassword });
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
@@ -35,41 +34,45 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <h2>Cadastro</h2>
-      <input
-        type="text"
-        placeholder="Nome"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="E-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Confirme sua Senha"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        required
-      />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="auth-container">
+      <form onSubmit={handleRegister} className="auth-form">
+        <h2>Cadastro</h2>
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirme sua Senha"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+        {error && <p className="auth-error">{error}</p>}
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Registrando...' : 'Registrar'}
-      </button>
-    </form>
+        <div className="auth-buttons-container">
+          <button type="submit" disabled={loading}>
+            {loading ? 'Registrando...' : 'Registrar'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

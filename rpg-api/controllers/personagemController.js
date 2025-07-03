@@ -30,7 +30,7 @@ exports.createPersonagem = async (req, res) => {
       tecnologia,
       intuicao
     } = req.body;
-
+    console.log(req.body)
     
     const personagem = await Personagem.create({ nome, origem, classe, nex, deslocamento, imagem_url });
 
