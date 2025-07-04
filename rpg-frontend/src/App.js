@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import './App.css';
 import PrivateRoute from './components/PrivateRouter';
+import VisualizarPersonagem from './pages/VisualizarPersonagem';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <EditarPersonagem />
               </PrivateRoute>
             } />
+            <Route path="/personagem/:id" element={<VisualizarPersonagem />} />
           </Routes>
         </div>
       </div>

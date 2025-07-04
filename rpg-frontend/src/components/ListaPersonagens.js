@@ -47,6 +47,7 @@ function ListaPersonagens() {
               personagem={personagem}
               onDelete={handleDelete}
               onEdit={() => navigate(`/editar/${personagem.id}`)}
+              onVisualize={() => navigate(`/personagem/${personagem.id}`)}
             />
           ))}
         </div>

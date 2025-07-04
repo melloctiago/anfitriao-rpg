@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PersonagemCard({ personagem, onDelete, onEdit }) {
+function PersonagemCard({ personagem, onDelete, onEdit, onVisualize }) {
 
   const backendUrl = 'http://localhost:3000';
 
@@ -33,6 +33,7 @@ function PersonagemCard({ personagem, onDelete, onEdit }) {
 
         <div className="card-actions">
           <button onClick={() => onEdit(personagem.id)}>Editar</button>
+          <button onClick={() => onVisualize(personagem.id)}>Ver</button>
           <button onClick={() => onDelete(personagem.id)}>Excluir</button>
         </div>
       </div>
