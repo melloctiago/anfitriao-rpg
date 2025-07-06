@@ -63,7 +63,7 @@ class AuthService {
         
     return {
       token,
-      usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email },
+      usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email, role: usuario.role },
     };
   }
 
@@ -74,8 +74,10 @@ class AuthService {
     if (!usuario) {
       throw new Error('Usuário não encontrado');
     }
+  
+    
 
-    return { id: usuario.id, nome: usuario.nome, email: usuario.email };
+    return { id: usuario.id, nome: usuario.nome, email: usuario.email, role: usuario.role };
   }
 }
 

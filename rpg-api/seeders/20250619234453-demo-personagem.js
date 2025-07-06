@@ -7,7 +7,9 @@ module.exports = {
         origem: 'Universitário',
         classe: 'Ocultista',
         nex: 10,
-        deslocamento: 8
+        deslocamento: 8,
+        imagem_url: "",
+        usuario_id: 1
       },
       {
         id: 2,
@@ -15,7 +17,9 @@ module.exports = {
         origem: 'Universitário ',
         classe: 'Especialista',
         nex: 8,
-        deslocamento: 8
+        deslocamento: 8,
+        imagem_url: "",
+        usuario_id: 1
       }
     ]);
   },

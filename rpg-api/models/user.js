@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       senha: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      role: {
+        type: DataTypes.ENUM('admin', 'usuario'),
+        allowNull: false,
+        defaultValue: 'usuario'
       }
     },
     {
@@ -37,5 +42,11 @@ module.exports = (sequelize, DataTypes) => {
     return await bcrypt.compare(senha, this.senha);
   };
 
+  User.associate = function(models) {
+  User.hasMany(models.Personagem, {
+    foreignKey: 'usuario_id',
+    as: 'personagens'
+  });
+};
   return User;
 };

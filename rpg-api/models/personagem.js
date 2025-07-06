@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       imagem_url: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      usuario_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
       }
     },
     {
@@ -34,5 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  Personagem.associate = function (models) {
+    Personagem.belongsTo(models.User, {
+      foreignKey: 'usuario_id',
+      as: 'dono'
+    });
+  };
   return Personagem;
 };
