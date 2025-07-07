@@ -2,12 +2,14 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,8 +18,7 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await api.post('/login', { email, senha });
-      localStorage.setItem('token', res.data.token);
-      navigate('/home');
+      login(res.data.token);
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Email ou senha inválidos.';
       setError(errorMessage);

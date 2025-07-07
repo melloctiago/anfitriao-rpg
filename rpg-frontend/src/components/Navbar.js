@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { useAuth } from '../context/AuthContext';
 function Navbar() {
+  const { isAuthenticated, logout } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="logo-title-container">
@@ -9,10 +11,21 @@ function Navbar() {
         <h1>Anfitrião</h1>
       </div>
       <div className="links">
-        <Link to="/home">Home</Link>
-        <Link to="/novo">Criar</Link>
+        {isAuthenticated ? (
+          <>
+            <Link to="/home" className="navbar-link">Home</Link>
+            <Link to="/novo" className="navbar-link">Criar</Link>
+            <button onClick={logout} className="navbar-link">Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/" className="navbar-link">Login</Link>
+            <Link to="/register" className="navbar-link">Cadastrar</Link>
+          </>
+        )}
       </div>
     </nav>
   );
 }
+
 export default Navbar;

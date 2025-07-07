@@ -9,35 +9,38 @@ import Register from './pages/Register';
 import './App.css';
 import PrivateRoute from './components/PrivateRouter';
 import VisualizarPersonagem from './pages/VisualizarPersonagem';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Navbar />
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/home" element={
-              <PrivateRoute>
-                <HomePage />
-              </PrivateRoute>
-            } />
-            <Route path="/novo" element={
-              <PrivateRoute>
-                <NovoPersonagem />
-              </PrivateRoute>
-            } />
-            <Route path="/editar/:id" element={
-              <PrivateRoute>
-                <EditarPersonagem />
-              </PrivateRoute>
-            } />
-            <Route path="/personagem/:id" element={<VisualizarPersonagem />} />
-          </Routes>
+      <AuthProvider>
+        <div className="App">
+          <Navbar />
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/home" element={
+                <PrivateRoute>
+                  <HomePage />
+                </PrivateRoute>
+              } />
+              <Route path="/novo" element={
+                <PrivateRoute>
+                  <NovoPersonagem />
+                </PrivateRoute>
+              } />
+              <Route path="/editar/:id" element={
+                <PrivateRoute>
+                  <EditarPersonagem />
+                </PrivateRoute>
+              } />
+              <Route path="/personagem/:id" element={<VisualizarPersonagem />} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </AuthProvider>
     </Router>
   );
 }
