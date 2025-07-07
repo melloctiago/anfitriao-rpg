@@ -47,6 +47,9 @@ exports.createPersonagem = async (req, res) => {
     }, { transaction: t });
 
     await t.commit();
+
+    const io = req.app.get('io')
+    io.emit('personagens_atualizados');
     res.status(201).json({ id: personagem.id, message: 'Personagem criado com sucesso!' });
   } catch (error) {
     await t.rollback();
@@ -62,7 +65,7 @@ exports.getAllPersonagens = async (req, res) => {
     const token = getTokenFromHeader(req);
     const usuarioVerificado = await AuthService.verificarToken(token);
 
-        console.log('--- Iniciando getAllPersonagens ---');
+    console.log('--- Iniciando getAllPersonagens ---');
     console.log('Usuário verificado pelo token:', usuarioVerificado);
 
     const whereClause = {};
@@ -133,6 +136,8 @@ exports.updatePersonagem = async (req, res) => {
     await PericiasPersonagem.update(updateData, { where: { personagem_id: id }, transaction: t });
 
     await t.commit();
+    const io = req.app.get('io');
+    io.emit('personagens_atualizados');
     res.json({ message: 'Personagem atualizado com sucesso!' });
   } catch (error) {
     await t.rollback();
@@ -159,6 +164,9 @@ exports.deletePersonagem = async (req, res) => {
     }
 
     await Personagem.destroy({ where: { id } });
+
+    const io = req.app.get('io');
+    io.emit('personagens_atualizados');
 
     res.json({ message: 'Personagem deletado com sucesso!' });
   } catch (error) {

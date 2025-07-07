@@ -2,31 +2,44 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import PersonagemCard from './PersonagemCard';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../context/SocketContext';
 
 function ListaPersonagens() {
   const [personagens, setPersonagens] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    carregarPersonagens();
-  }, []);
+  const socket = useSocket();
 
   const carregarPersonagens = async () => {
     try {
       const response = await api.get('/personagens');
       setPersonagens(response.data);
-      setLoading(false);
     } catch (error) {
       console.error('Erro ao carregar personagens:', error);
+    } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    carregarPersonagens();
+
+    if (socket) {
+      socket.on('personagens_atualizados', () => {
+        console.log('Recebido evento de atualização! Recarregando personagens...');
+        carregarPersonagens();
+      });
+
+      return () => {
+        socket.off('personagens_atualizados');
+      };
+    }
+  }, [socket]);
+
   const handleDelete = async (id) => {
     try {
       await api.delete(`/personagens/${id}`);
-      carregarPersonagens();
+
     } catch (error) {
       console.error('Erro ao deletar personagem:', error);
     }

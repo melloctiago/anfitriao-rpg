@@ -10,36 +10,39 @@ import './App.css';
 import PrivateRoute from './components/PrivateRouter';
 import VisualizarPersonagem from './pages/VisualizarPersonagem';
 import { AuthProvider } from './context/AuthContext';
+import { SocketProvider } from './context/SocketContext';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="App">
-          <Navbar />
-          <div className="content">
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/home" element={
-                <PrivateRoute>
-                  <HomePage />
-                </PrivateRoute>
-              } />
-              <Route path="/novo" element={
-                <PrivateRoute>
-                  <NovoPersonagem />
-                </PrivateRoute>
-              } />
-              <Route path="/editar/:id" element={
-                <PrivateRoute>
-                  <EditarPersonagem />
-                </PrivateRoute>
-              } />
-              <Route path="/personagem/:id" element={<VisualizarPersonagem />} />
-            </Routes>
+        <SocketProvider>
+          <div className="App">
+            <Navbar />
+            <div className="content">
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/home" element={
+                  <PrivateRoute>
+                    <HomePage />
+                  </PrivateRoute>
+                } />
+                <Route path="/novo" element={
+                  <PrivateRoute>
+                    <NovoPersonagem />
+                  </PrivateRoute>
+                } />
+                <Route path="/editar/:id" element={
+                  <PrivateRoute>
+                    <EditarPersonagem />
+                  </PrivateRoute>
+                } />
+                <Route path="/personagem/:id" element={<VisualizarPersonagem />} />
+              </Routes>
+            </div>
           </div>
-        </div>
+        </SocketProvider>
       </AuthProvider>
     </Router>
   );
