@@ -105,7 +105,6 @@ function PersonagemForm({ personagem, onSubmit, isEditing }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Dados enviados para o backend:', formData);
       onSubmit(formData);
     }
   };

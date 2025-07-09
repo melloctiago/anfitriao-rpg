@@ -9,6 +9,5 @@ module.exports = {
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('users', 'role');
-    // O ENUM também precisa ser removido no PostgreSQL, mas para MySQL/SQLite isso basta.
   }
 };

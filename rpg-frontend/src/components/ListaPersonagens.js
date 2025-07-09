@@ -26,7 +26,6 @@ function ListaPersonagens() {
 
     if (socket) {
       socket.on('personagens_atualizados', () => {
-        console.log('Recebido evento de atualização! Recarregando personagens...');
         carregarPersonagens();
       });
 

@@ -30,6 +30,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+#Para não subir os as imagens para o git
+uploads/
+
 # vercel
 .vercel
 

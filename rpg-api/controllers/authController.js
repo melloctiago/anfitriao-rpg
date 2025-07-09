@@ -29,8 +29,6 @@ class AuthController {
 
   static async login(req, res) {
     try {
-      console.log("Chegou no auth controler pelo menos né veyr")
-      console.log(req.body)
       const resultado = await AuthService.autenticarUsuario(req.body);
 
       res.status(200).json({

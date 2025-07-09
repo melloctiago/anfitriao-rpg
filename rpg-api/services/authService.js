@@ -6,9 +6,8 @@ const { User } = require('../models');
 const JWT_SECRET = process.env.JWT_SECRET || 'vibesveganas';
 
 class AuthService {
-  static async registrarUsuario({ nome, email, senha, confirmPassword }) {
+  static async registrarUsuario({ nome, email, senha, confirmPassword, role }) {
     if (!nome || !email || !senha || !confirmPassword) {
-      console.log("chegou aquir")
       throw new Error('Por favor, preencha todos os campos');
     }
 
@@ -34,6 +33,7 @@ class AuthService {
       nome,
       email,
       senha: hashedPassword,
+      role: role || 'usuario'
     });
 
     const token = jwt.sign({ id: novoUsuario.id }, JWT_SECRET, {
@@ -52,8 +52,6 @@ class AuthService {
     if (!usuario) {
       throw new Error('Email ou senha incorretos');
     }
-
-        console.log(senha, usuario.senha)
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
     if (!senhaCorreta) {
       throw new Error('Email ou senha incorretos');

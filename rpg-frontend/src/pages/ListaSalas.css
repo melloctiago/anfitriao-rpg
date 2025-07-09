@@ -1,0 +1,89 @@
+.lista-salas-container {
+    padding: 20px;
+}
+
+.lista-salas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #b695dd;
+    padding-bottom: 20px;
+}
+
+.lista-salas-header h2 {
+    margin: 0;
+    color: #7e60a5;
+}
+
+.btn-criar-sala {
+    background-color: #a383cb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-criar-sala:hover {
+    background-color: #9172b8;
+}
+
+.salas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.sala-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sala-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    /* Garante que a imagem não vaze para fora do border-radius */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.sala-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.sala-card-banner {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.sala-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 20px 15px 10px;
+}
+
+.sala-card-overlay h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.4em;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.sala-card-info {
+    padding: 15px;
+}
+
+.sala-card-info p {
+    margin: 0;
+    color: #555;
+}

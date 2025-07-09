@@ -14,7 +14,8 @@ function Navbar() {
         {isAuthenticated ? (
           <>
             <Link to="/home" className="navbar-link">Home</Link>
-            <Link to="/novo" className="navbar-link">Criar</Link>
+            <Link to="/novo" className="navbar-link">Criar Personagem</Link>
+            <Link to="/salas" className="navbar-link">Salas</Link>
             <button onClick={logout} className="navbar-link">Logout</button>
           </>
         ) : (

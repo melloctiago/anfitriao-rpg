@@ -8,6 +8,7 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('usuario');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await api.post('/register', { nome, email, senha, confirmPassword });
+      await api.post('/register', { nome, email, senha, confirmPassword, role });
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
       navigate('/');
     } catch (err) {
@@ -65,6 +66,10 @@ export default function Register() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
+        <select value={role} onChange={(e) => setRole(e.target.value)} required>
+          <option value="usuario">Quero ser um Jogador</option>
+          <option value="admin">Quero ser um Mestre</option>
+        </select>
         {error && <p className="auth-error">{error}</p>}
 
         <div className="auth-buttons-container">

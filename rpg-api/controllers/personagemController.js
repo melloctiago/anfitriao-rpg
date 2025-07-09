@@ -65,18 +65,13 @@ exports.getAllPersonagens = async (req, res) => {
     const token = getTokenFromHeader(req);
     const usuarioVerificado = await AuthService.verificarToken(token);
 
-    console.log('--- Iniciando getAllPersonagens ---');
-    console.log('Usuário verificado pelo token:', usuarioVerificado);
-
     const whereClause = {};
 
     if (usuarioVerificado.role !== 'admin') {
       whereClause.usuario_id = usuarioVerificado.id;
     }
-    console.log('Cláusula de busca (Where):', whereClause);
 
     const personagens = await Personagem.findAll({ where: whereClause });
-    console.log('Personagens encontrados:', personagens.length);
     res.json(personagens);
   } catch (error) {
     if (error.message.includes('token')) {

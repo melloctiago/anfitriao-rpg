@@ -30,8 +30,6 @@ function ImageUpload({ onUploadSuccess }) {
             })
             .catch(error => {
                 setMessage('Ocorreu um erro ao fazer o upload.');
-                console.error('Erro no upload:', error);
-                console.log(formData)
             });
     };
 

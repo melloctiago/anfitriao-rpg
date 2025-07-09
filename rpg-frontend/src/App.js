@@ -11,6 +11,9 @@ import PrivateRoute from './components/PrivateRouter';
 import VisualizarPersonagem from './pages/VisualizarPersonagem';
 import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
+import Tabuleiro from './pages/Tabuleiro';
+import CriarSala from './pages/CriarSala';
+import ListaSalas from './pages/ListaSalas';
 
 function App() {
   return (
@@ -31,6 +34,21 @@ function App() {
                 <Route path="/novo" element={
                   <PrivateRoute>
                     <NovoPersonagem />
+                  </PrivateRoute>
+                } />
+                <Route path="/tabuleiro/:id" element={
+                  <PrivateRoute>
+                    <Tabuleiro />
+                  </PrivateRoute>
+                } />
+                <Route path="/salas/criar" element={
+                  <PrivateRoute>
+                    <CriarSala />
+                  </PrivateRoute>
+                } />
+                <Route path="/salas" element={
+                  <PrivateRoute>
+                    <ListaSalas />
                   </PrivateRoute>
                 } />
                 <Route path="/editar/:id" element={
